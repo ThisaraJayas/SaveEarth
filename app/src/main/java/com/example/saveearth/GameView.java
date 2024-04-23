@@ -145,6 +145,14 @@ public class GameView  extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        float touchX = event.getX();
+        float touchY = event.getY();
+        if(event.getAction()==MotionEvent.ACTION_DOWN){
+            if(plasticAnimation==false &&
+                    (touchX>=handX && touchX<=(handY+hand.getHeight()))){
+                plasticAnimation=true;
+            }
+        }
 
         return true;
     }
