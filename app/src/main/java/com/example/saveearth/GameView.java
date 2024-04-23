@@ -97,6 +97,50 @@ public class GameView  extends View {
                 ((Activity) context).finish();
             }
         }
+        if(plasticAnimation){
+            plasticY+=40;
+        }
+        if(plasticAnimation
+        &&(plasticX+plastic.getWidth()>=trashX)
+        &&(plasticX<=trashX+trash.getWidth())
+        &&(plasticY+plastic.getHeight()>=(deviceHeight-trash.getHeight()))
+        && plasticY<=deviceHeight){
+            handX=deviceWidth+random.nextInt(300);
+            plasticX=handX;
+            handY=random.nextInt(600);
+            plasticY=handY+hand.getHeight()-30;
+            handSpeed=21+random.nextInt(30);
+            points++;
+            trashX=hand.getWidth()+random.nextInt(deviceWidth-2*hand.getWidth());
+            plasticAnimation=false;
+        }
+        if(plasticAnimation && (plasticY+plastic.getHeight())>=deviceHeight){
+            life--;
+            if(life==0){
+                Intent intent = new Intent(context, GameOver.class);
+                intent.putExtra("points",points);
+                context.startActivity(intent);
+                ((Activity) context).finish();
+            }
+            handX = deviceWidth+random.nextInt(300);
+            plasticX=handX;
+            handY=random.nextInt(600);
+            plasticY=handY+hand.getHeight()-30;
+            trashX=hand.getWidth()+random.nextInt(deviceWidth-2*hand.getWidth());
+            plasticAnimation =false;
+        }
+        canvas.drawBitmap(trash, trashX, trashY, null);
+        canvas.drawBitmap(hand, handX, handY, null);
+        canvas.drawBitmap(plastic, plasticX, plasticY, null);
+        canvas.drawText(""+points, 20, TEXT_SIZE, textPaint);
+        if(life==2)
+            healthPaint.setColor(Color.YELLOW);
+        else if (life==1)
+            healthPaint.setColor(Color.RED);
+        canvas.drawRect(deviceWidth-200,30,deviceWidth-200+60*life, 80, healthPaint);
+        if(life!=0)
+            handler.postDelayed(runnable,UPDATE_MILLIS);
+
     }
 
     @Override
